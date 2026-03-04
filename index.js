@@ -14,7 +14,6 @@ const displaySynonyms=(synonyms)=>{
 }
 
 const manageSpinner=(status)=>{
-    console.log(status);
     if(status==true){
         document.getElementById('spinner').classList.remove('hidden');
         document.getElementById('word-container').classList.add('hidden');
