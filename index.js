@@ -8,7 +8,24 @@ const removeActiveClass=()=>{
     const allLessonBtn=document.querySelectorAll('.lesson-btn');
     allLessonBtn.forEach(btn=>btn.classList.remove('active'));
 }
+const displaySynonyms=(synonyms)=>{
+    const htmlElm=synonyms.map(synonym=>`<span class='btn'>${synonym}</span>`)
+    return htmlElm.join(" ");
+}
+
+const manageSpinner=(status)=>{
+    console.log(status);
+    if(status==true){
+        document.getElementById('spinner').classList.remove('hidden');
+        document.getElementById('word-container').classList.add('hidden');
+    }
+    else{
+        document.getElementById('word-container').classList.remove('hidden');
+        document.getElementById('spinner').classList.add('hidden');
+    }
+}
 const loadWord=(id)=>{
+    manageSpinner(true)
     const url=`https://openapi.programming-hero.com/api/level/${id}`
     fetch(url)
     .then((res)=>res.json())
@@ -39,15 +56,14 @@ const displayWordDetails=(word)=>{
         <div class="space-y-1">
             <h2 class="font-bold font-bangla">সমার্থক শব্দ গুলো</h2>
             <div>
-                <span class="btn">${word.synonyms[0]}</span>
-                <span class="btn">${word.synonyms[1]}</span>
-                <span class="btn">${word.synonyms[2]}</span>
+                ${displaySynonyms(word.synonyms)}
             </div>
         </div>
     `
     document.getElementById('my_modal').showModal();
 }
 const displayLevelWord=(words)=>{
+    
     const wordContainer=document.getElementById('word-container');
     wordContainer.innerHTML='';
     if(words.length==0){
@@ -58,6 +74,8 @@ const displayLevelWord=(words)=>{
             <h2 class="text-2xl font-bold ">নেক্সট Lesson এ যান</h2>
         </div>
         `
+        manageSpinner(false);
+        return;
     }
     words.forEach(word => {
         const wordCard=document.createElement('div');
@@ -74,6 +92,7 @@ const displayLevelWord=(words)=>{
         `  
         wordContainer.appendChild(wordCard);      
     });
+    manageSpinner(false);
 }
 const displayLesson=(lessons)=>{
     const lessonContainer=document.getElementById('lesson-container');
