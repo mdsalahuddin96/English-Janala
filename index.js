@@ -1,9 +1,4 @@
-const loadLesson=()=>{
-    const url='https://openapi.programming-hero.com/api/levels/all';
-    fetch(url)
-    .then((res)=>res.json())
-    .then((json)=>displayLesson(json.data));
-}
+
 const removeActiveClass=()=>{
     const allLessonBtn=document.querySelectorAll('.lesson-btn');
     allLessonBtn.forEach(btn=>btn.classList.remove('active'));
@@ -22,6 +17,18 @@ const manageSpinner=(status)=>{
         document.getElementById('word-container').classList.remove('hidden');
         document.getElementById('spinner').classList.add('hidden');
     }
+}
+
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-US"; // English
+  window.speechSynthesis.speak(utterance);
+}
+const loadLesson=()=>{
+    const url='https://openapi.programming-hero.com/api/levels/all';
+    fetch(url)
+    .then((res)=>res.json())
+    .then((json)=>displayLesson(json.data));
 }
 const loadWord=(id)=>{
     manageSpinner(true)
@@ -85,7 +92,7 @@ const displayLevelWord=(words)=>{
             <div class="text-2xl font-medium font-bangla">"${word.meaning?word.meaning:"অর্থ পাওয়া যায় নি"} / ${word.pronunciation?word.pronunciation:"Pronunciation পাওয়া যায় নি"}"</div>
             <div class="flex justify-between items-center">
                 <button onclick="loadWordDetails(${word.id})" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-circle-info"></i></button>
-                <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high"></i></button>
+                <button onclick="pronounceWord('${word.word}')" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high"></i></button>
             </div>
         </div>
         `  
